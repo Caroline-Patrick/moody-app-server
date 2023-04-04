@@ -1,17 +1,17 @@
 const express = require("express");
 const app = express();
 
-const pool =require("./sql/connections")
+const pool =require("./sql/connections");
+const usersRoute =require("./routes/usersRoute");
+const userLogsRoute=require("./routes/userLogsRoute");
 
-const usersRoute =require("./routes/usersRoute")
 const PORT = process.env.PORT || 5000;
 
 
 
 app.use(express.json());
-
 app.use('/users', usersRoute);
-
+app.use('/userLogs', userLogsRoute);
  
 
 
