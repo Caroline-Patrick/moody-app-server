@@ -21,15 +21,30 @@ CREATE TABLE `interventions` (
   `interventionId` INT NOT NULL AUTO_INCREMENT,
   `interventionName` VARCHAR(45) NOT NULL,
   `interventionDesc` VARCHAR(45) NOT NULL,
-  `moodId` INT NOT NULL,
   PRIMARY KEY (`interventionId`),
-  UNIQUE INDEX `interventionId_UNIQUE` (`interventionId` ASC) VISIBLE,
+  UNIQUE INDEX `interventionId_UNIQUE` (`interventionId` ASC) VISIBLE);
+
+
+CREATE TABLE `mood_interventions` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `moodId` INT NOT NULL,
+  `interventionId` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `mood_intervention_unique` (`moodId`, `interventionId`) VISIBLE,
   INDEX `fk_moodId_idx` (`moodId` ASC) VISIBLE,
+  INDEX `fk_interventionId_idx` (`interventionId` ASC) VISIBLE,
   CONSTRAINT `fk_moodId`
     FOREIGN KEY (`moodId`)
     REFERENCES `moods` (`moodId`)
     ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_interventionId`
+    FOREIGN KEY (`interventionId`)
+    REFERENCES `interventions` (`interventionId`)
+    ON DELETE CASCADE
     ON UPDATE CASCADE);
+
+  
 
 CREATE TABLE `userLogs` (
   `logId` INT NOT NULL AUTO_INCREMENT,
@@ -84,3 +99,11 @@ VALUES
   (12, "Log", "I listened to music", 002),
   (13, "Journal", "write down your feelings", 003),
   (14, "Gratitude", "what are you grateful for", 004);
+
+
+INSERT INTO mood_interventions
+  (moodId, interventionId)
+
+VALUES
+(1, 11),
+(1, 13)

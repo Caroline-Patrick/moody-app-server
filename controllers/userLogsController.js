@@ -66,9 +66,29 @@ const create = (req, res) => {
             return;
           }
 
-          res.json({ message: "UserLog created successfully" });
+          // res.json({ message: "UserLog created successfully" });
         }
       );
+
+      //below, 'i' is variable for interventions table && 'mi' stands for mood_interventions table
+      //The INNER JOIN is joining the interventions and mood_interventions tables based on their common interventionId column
+      //WHERE mi.moodId = ? --> filters the joined rows based on specified moodId. Will return rows where  moodId in the mood_interventions table (mi.moodId) is equal to the given moodId.
+      pool.query(
+        "SELECT i.interventionId, i.interventionName, i.interventionDesc FROM interventions i INNER JOIN mood_interventions mi ON i.interventionId = mi.interventionId WHERE mi.moodId = ?",
+        [moodId],
+        (err, interventions, fields) => {
+          if (err) {
+            console.log(err);
+            res.status(500).send("Error occurred while fetching interventions");
+            return;
+          }
+
+          // Send a response with the intervention options
+          res.json({
+            message: "UserLog created successfully",
+            interventions: interventions,
+          })
+        });
     }
   );
 };
