@@ -65,18 +65,31 @@ const create = (req, res) => {
             res.status(500).send("Error occurred while inserting userLog");
             return;
           }
-
-          // res.json({ message: "UserLog created successfully" });
         }
       );
-
+      // Fetch and return the list of interventions based on the mood
       //below, 'i' is variable for interventions table && 'mi' stands for mood_interventions table
       //The INNER JOIN is joining the interventions and mood_interventions tables based on their common interventionId column
       //WHERE mi.moodId = ? --> filters the joined rows based on specified moodId. Will return rows where  moodId in the mood_interventions table (mi.moodId) is equal to the given moodId.
       pool.query(
-        "SELECT i.interventionId, i.interventionName, i.interventionDesc FROM interventions i INNER JOIN mood_interventions mi ON i.interventionId = mi.interventionId WHERE mi.moodId = ?",
-        [moodId],
-        (err, interventions, fields) => {
+        `SELECT 
+    i.interventionId, 
+    i.interventionName, 
+    i.interventionDesc,
+    'preset' as interventionType
+  FROM interventions i
+  INNER JOIN mood_interventions mi ON i.interventionId = mi.interventionId
+  WHERE mi.moodId = ?
+  UNION ALL
+  SELECT 
+    ui.userInterventionId as interventionId, 
+    ui.interventionName, 
+    ui.interventionDesc,
+    'user' as interventionType
+  FROM userInterventions ui
+  WHERE ui.moodId = ? AND ui.userId = ?`,
+        [moodId, moodId, userId],
+        (err, rows, fields) => {
           if (err) {
             console.log(err);
             res.status(500).send("Error occurred while fetching interventions");
@@ -86,9 +99,10 @@ const create = (req, res) => {
           // Send a response with the intervention options
           res.json({
             message: "UserLog created successfully",
-            interventions: interventions,
-          })
-        });
+            interventions: rows,
+          });
+        }
+      );
     }
   );
 };
@@ -134,6 +148,27 @@ const update = (req, res) => {
   );
 };
 
+const updateIntervention = (req, res) => {
+  const userId = parseInt(req.params.userId);
+  const logId = parseInt(req.params.logId);
+  const { interventionId } = req.body;
+
+  pool.query(
+    `UPDATE userLogs SET interventionId = ? WHERE userId = ? AND logId = ?`,
+    [interventionId, userId, logId],
+    function (err, result) {
+      if (err) {
+        console.log(err);
+        res
+          .status(500)
+          .send("Error occurred while updating the userLog with intervention");
+        return;
+      }
+      res.json({ affectedRows: result.affectedRows });
+    }
+  );
+};
+
 const remove = (req, res) => {
   const userId = parseInt(req.params.userId);
   const logId = parseInt(req.params.logId);
@@ -154,5 +189,6 @@ module.exports = {
   show,
   create,
   update,
+  updateIntervention,
   remove,
 };

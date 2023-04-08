@@ -44,28 +44,50 @@ CREATE TABLE `mood_interventions` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
-  
-
-CREATE TABLE `userLogs` (
-  `logId` INT NOT NULL AUTO_INCREMENT,
-  `createDate` DATE NOT NULL,
-  `createTime` DATETIME NOT NULL,
+  CREATE TABLE `userInterventions` (
+  `userInterventionId` INT NOT NULL AUTO_INCREMENT,
+  `interventionName` VARCHAR(45) NOT NULL,
+  `interventionDesc` VARCHAR(45) NOT NULL,
   `moodId` INT NOT NULL,
   `userId` INT NOT NULL,
-  PRIMARY KEY (`logId`),
-  UNIQUE INDEX `logId_UNIQUE` (`logId` ASC) VISIBLE,
-  INDEX `fk_moodId_idx` (`moodId` ASC) VISIBLE,
-  INDEX `fk_userId_idx` (`userId` ASC) VISIBLE,
-  CONSTRAINT `fk_moodId_logs`
+  PRIMARY KEY (`userInterventionId`),
+  UNIQUE INDEX `userInterventionId_UNIQUE` (`userInterventionId` ASC) VISIBLE,
+  INDEX `fk_userInterventions_moodId_idx` (`moodId` ASC) VISIBLE,
+  INDEX `fk_userInterventions_userId_idx` (`userId` ASC) VISIBLE,
+  CONSTRAINT `fk_userInterventions_moodId`
     FOREIGN KEY (`moodId`)
     REFERENCES `moods` (`moodId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_userId`
+  CONSTRAINT `fk_userInterventions_userId`
     FOREIGN KEY (`userId`)
     REFERENCES `users` (`userId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
+
+
+CREATE TABLE `userLogs` (
+  `logId` INT NOT NULL AUTO_INCREMENT,
+  `createDate` DATE NOT NULL,
+  `createTime` TIME NOT NULL,
+  `moodId` INT NOT NULL,
+  `userId` INT NOT NULL,
+  `interventionId` INT, -- Add this line to include the interventionId column
+  PRIMARY KEY (`logId`),
+  UNIQUE INDEX `logId_UNIQUE` (`logId` ASC) VISIBLE,
+  INDEX `fk_userLogs_moodId_idx` (`moodId` ASC) VISIBLE,
+  INDEX `fk_userLogs_userId_idx` (`userId` ASC) VISIBLE,
+  CONSTRAINT `fk_userLogs_moodId` -- Updated constraint name
+    FOREIGN KEY (`moodId`)
+    REFERENCES `moods` (`moodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_userLogs_userId` -- Updated constraint name
+    FOREIGN KEY (`userId`)
+    REFERENCES `users` (`userId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
 
 
 
@@ -93,12 +115,12 @@ VALUES
   (004, "Bored", "feeling blah");
 
 INSERT INTO interventions
-	(interventionId, interventionName, interventionDesc, moodId)
+	(interventionId, interventionName, interventionDesc)
 VALUES 
-  (11, "Scribbling", "scribble through paper", 001),
-  (12, "Log", "I listened to music", 002),
-  (13, "Journal", "write down your feelings", 003),
-  (14, "Gratitude", "what are you grateful for", 004);
+  (11, "Scribbling", "scribble through paper"),
+  (12, "Log", "I listened to music"),
+  (13, "Journal", "write down your feelings"),
+  (14, "Gratitude", "what are you grateful for");
 
 
 INSERT INTO mood_interventions
