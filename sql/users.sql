@@ -5,13 +5,10 @@ CREATE TABLE `users` (
   `firstName` VARCHAR(45) NOT NULL,
   `lastName` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `userName` VARCHAR(45) NOT NULL,
   `password` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`userId`),
   UNIQUE INDEX `userId_UNIQUE` (`userId` ASC) VISIBLE,
-  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-  UNIQUE INDEX `userName_UNIQUE` (`userName` ASC) VISIBLE);
-
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE);
 
 CREATE TABLE `moods` (
   `moodId` INT NOT NULL AUTO_INCREMENT,
@@ -59,18 +56,18 @@ CREATE TABLE `userLogs` (
 
 
 INSERT INTO users
-	(firstName, lastName, email, userName, password)
+	(firstName, lastName, email, password)
 VALUES 
-  ("James", "Butt", "james.butt@gmail.com", "james_butt", "password1"),
-  ("Josephine", "Darakjy", "josephine.darakjy@gmail.com", "josephine_darakjy", "password2"),
-  ("Art", "Venere", "art.venere@gmail.com", "art_venere", "password3"),
-  ("Lenna", "Paprocki", "lenna.paprocki@gmail.com", "lenna_paprocki", "password4"),
-  ("Donette", "Foller", "donette.foller@gmail.com", "donette_foller", "password5"),
-  ("Simona", "Morasca", "simona.morasca@gmail.com", "simona_morasca", "password6"),
-  ("Mitsue", "Tollner", "mitsue.tollner@gmail.com", "mitsue_tollner", "password7"),
-  ("Leota", "Dilliard", "leota.dilliard@gmail.com", "leota_dilliard", "password8"),
-  ("Sage", "Wieser", "sage.wieser@gmail.com", "sage_wieser", "password9"),
-  ("Kris", "Marrier", "kris.marrier@gmail.com", "kris_marrier", "password10");
+  ("James", "Butt", "james.butt@gmail.com", "password1"),
+  ("Josephine", "Darakjy", "josephine.darakjy@gmail.com", "password2"),
+  ("Art", "Venere", "art.venere@gmail.com",  "password3"),
+  ("Lenna", "Paprocki", "lenna.paprocki@gmail.com", "password4"),
+  ("Donette", "Foller", "donette.foller@gmail.com", "password5"),
+  ("Simona", "Morasca", "simona.morasca@gmail.com",  "password6"),
+  ("Mitsue", "Tollner", "mitsue.tollner@gmail.com", "password7"),
+  ("Leota", "Dilliard", "leota.dilliard@gmail.com",  "password8"),
+  ("Sage", "Wieser", "sage.wieser@gmail.com",  "password9"),
+  ("Kris", "Marrier", "kris.marrier@gmail.com",  "password10");
 
 INSERT INTO moods
 	(moodId, moodName, moodDesc)

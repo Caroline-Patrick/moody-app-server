@@ -20,11 +20,11 @@ const show = (req, res) => {
 const create = (req, res) => {
   // console.log(req.body)
 
-  const { firstName, lastName, email, userName, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   pool.query(
-    `INSERT INTO users(userId, firstName, lastName, email, userName, password) VALUES (?, ?, ?, ?, ?, ?)`,
-    [null, firstName, lastName, email, userName, password],
+    `INSERT INTO users(userId, firstName, lastName, email, password) VALUES (?, ?, ?, ?, ?, ?)`,
+    [null, firstName, lastName, email, password],
     function (err, row, fields) {
       res.json(row);
     }
