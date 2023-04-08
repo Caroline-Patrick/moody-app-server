@@ -76,6 +76,30 @@ const create = (req, res) => {
       );
     });
   };
+
+  // const update = (req, res) => {
+  //   const userId = parseInt(req.params.userId);
+  //   const logId = parseInt(req.params.logId);
+  
+  //   if (isNaN(userId) || isNaN(logId)) {
+  //     res.status(400).send('Invalid userId or logId');
+  //     return;
+  //   }
+  
+  //   pool.query(
+  //     `UPDATE userLogs SET ? WHERE userId = ? AND logId = ?`,
+  //     [req.body, userId, logId],
+  //     function (err, result) {
+  //       if (err) {
+  //         console.log(err);
+  //         res.status(500).send('Error occurred while updating the userLog');
+  //         return;
+  //       }
+  //       res.json({ affectedRows: result.affectedRows });
+  //     }
+  //   );
+  // };
+  
   
 
   const update = (req, res) => {
@@ -83,28 +107,27 @@ const create = (req, res) => {
     const logId = parseInt(req.params.logId);
     const { mood } = req.body;
   
+    if (isNaN(userId) || isNaN(logId)) {
+      res.status(400).send('Invalid userId or logId');
+      return;
+    }
+
     // Find the moodId associated with the mood string
     pool.query('SELECT moodId FROM moods WHERE moodName = ?', [mood], (err, rows, fields) => {
-      if (err) {
+      if (err || rows.length ===0) {
         // Handle error
         console.log(err);
         res.status(500).send('Error occurred while fetching moodId');
         return;
       }
   
-      if (rows.length === 0) {
-        // If no matching mood is found, return an error message
-        res.status(400).send('Mood not found');
-        return;
-      }
-  
-      // Get the moodId from the query result
-      const moodId = parseInt(rows[0].moodId);
+      // Get the moodId from the query result to update userLogs table
+      const moodId = rows[0].moodId;
   
   
   
     pool.query(
-      `UPDATE userLogs SET ? WHERE userId = ? AND logId = ?`,
+      `UPDATE userLogs SET moodId = ? WHERE userId = ? AND logId = ?`,
       [moodId, userId, logId],
       function (err, result) {
         if (err) {
