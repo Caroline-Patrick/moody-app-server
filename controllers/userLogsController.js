@@ -76,31 +76,7 @@ const create = (req, res) => {
       );
     });
   };
-
-  // const update = (req, res) => {
-  //   const userId = parseInt(req.params.userId);
-  //   const logId = parseInt(req.params.logId);
-  
-  //   if (isNaN(userId) || isNaN(logId)) {
-  //     res.status(400).send('Invalid userId or logId');
-  //     return;
-  //   }
-  
-  //   pool.query(
-  //     `UPDATE userLogs SET ? WHERE userId = ? AND logId = ?`,
-  //     [req.body, userId, logId],
-  //     function (err, result) {
-  //       if (err) {
-  //         console.log(err);
-  //         res.status(500).send('Error occurred while updating the userLog');
-  //         return;
-  //       }
-  //       res.json({ affectedRows: result.affectedRows });
-  //     }
-  //   );
-  // };
-  
-  
+    
 
   const update = (req, res) => {
     const userId = parseInt(req.params.userId);
@@ -141,12 +117,14 @@ const create = (req, res) => {
   })};
 
 const remove = (req,res)=> {
+
     const userId = parseInt(req.params.userId);
     const logId = parseInt(req.params.logId);
-
-    pool.query(`DELETE FROM userLogs WHERE userId=? AND logId= ?`, 
+console.log(`userId: ${userId} and logId: ${logId}`)
+   
+pool.query(`DELETE FROM userLogs WHERE userId=? AND logId= ?`, 
     //put whatever updates that come in from req.body; could be 1 or all (i.e.  email, name, etc.) where id=id coming in
-    [logId],
+    [userId, logId],
     function(err, row, fields) {
     res.json(row)
  });
