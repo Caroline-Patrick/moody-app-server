@@ -67,27 +67,26 @@ const create = (req, res) => {
           }
         }
       );
-      // Fetch and return the list of interventions based on the mood
-      //below, 'i' is variable for interventions table && 'mi' stands for mood_interventions table
-      //The INNER JOIN is joining the interventions and mood_interventions tables based on their common interventionId column
-      //WHERE mi.moodId = ? --> filters the joined rows based on specified moodId. Will return rows where  moodId in the mood_interventions table (mi.moodId) is equal to the given moodId.
+
+      // Fetches and returns the list of interventions (preset & user generated) based on the mood
       pool.query(
-        `SELECT 
-    i.interventionId, 
-    i.interventionName, 
-    i.interventionDesc,
-    'preset' as interventionType
-  FROM interventions i
-  INNER JOIN mood_interventions mi ON i.interventionId = mi.interventionId
-  WHERE mi.moodId = ?
-  UNION ALL
-  SELECT 
-    ui.userInterventionId as interventionId, 
-    ui.interventionName, 
-    ui.interventionDesc,
-    'user' as interventionType
-  FROM userInterventions ui
-  WHERE ui.moodId = ? AND ui.userId = ?`,
+      `SELECT 
+        i.interventionId, 
+        i.interventionName, 
+        i.interventionDesc,
+        'preset' as interventionType
+      FROM interventions i
+      INNER JOIN mood_interventions mi ON i.interventionId = mi.interventionId
+      WHERE mi.moodId = ?
+      UNION ALL
+      SELECT 
+        ui.userInterventionId as interventionId, 
+        ui.interventionName, 
+        ui.interventionDesc,
+        'user' as interventionType
+      FROM userInterventions ui
+      INNER JOIN userInterventionMoods uim ON ui.userInterventionId = uim.userInterventionId
+      WHERE uim.moodId = ? AND ui.userId = ?`,
         [moodId, moodId, userId],
         (err, rows, fields) => {
           if (err) {
@@ -106,6 +105,7 @@ const create = (req, res) => {
     }
   );
 };
+
 
 const update = (req, res) => {
   const userId = parseInt(req.params.userId);

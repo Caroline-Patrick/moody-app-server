@@ -20,7 +20,7 @@ CREATE TABLE `moods` (
 CREATE TABLE `interventions` (
   `interventionId` INT NOT NULL AUTO_INCREMENT,
   `interventionName` VARCHAR(45) NOT NULL,
-  `interventionDesc` VARCHAR(45) NOT NULL,
+  `interventionDesc` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`interventionId`),
   UNIQUE INDEX `interventionId_UNIQUE` (`interventionId` ASC) VISIBLE);
 
@@ -47,18 +47,11 @@ CREATE TABLE `mood_interventions` (
   CREATE TABLE `userInterventions` (
   `userInterventionId` INT NOT NULL AUTO_INCREMENT,
   `interventionName` VARCHAR(45) NOT NULL,
-  `interventionDesc` VARCHAR(45) NOT NULL,
-  `moodId` INT NOT NULL,
+  `interventionDesc` VARCHAR(200) NOT NULL,
   `userId` INT NOT NULL,
   PRIMARY KEY (`userInterventionId`),
   UNIQUE INDEX `userInterventionId_UNIQUE` (`userInterventionId` ASC) VISIBLE,
-  INDEX `fk_userInterventions_moodId_idx` (`moodId` ASC) VISIBLE,
   INDEX `fk_userInterventions_userId_idx` (`userId` ASC) VISIBLE,
-  CONSTRAINT `fk_userInterventions_moodId`
-    FOREIGN KEY (`moodId`)
-    REFERENCES `moods` (`moodId`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
   CONSTRAINT `fk_userInterventions_userId`
     FOREIGN KEY (`userId`)
     REFERENCES `users` (`userId`)
@@ -88,7 +81,24 @@ CREATE TABLE `userLogs` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
-
+CREATE TABLE `userInterventionMoods` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `userInterventionId` INT NOT NULL,
+  `moodId` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `user_intervention_mood_unique` (`moodId`, `userInterventionId`) VISIBLE,
+  INDEX `fk_moodId_idx` (`moodId` ASC) VISIBLE,
+  INDEX `fk_userInterventionId_idx` (`userInterventionId` ASC) VISIBLE,
+  CONSTRAINT `fk_userIntervention_moodId`
+    FOREIGN KEY (`moodId`)
+    REFERENCES `moods` (`moodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_userInterventionId`
+    FOREIGN KEY (`userInterventionId`)
+    REFERENCES `userInterventions` (`userInterventionId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 
 
