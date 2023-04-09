@@ -104,8 +104,19 @@ const create = (req, res) => {
             res.json({ affectedRows: result.affectedRows });
           }
         );
-      }
+      };
 
+      const remove = (req,res)=> {
+        const {userId, userInterventionId} = req.params;
+        
+     
+         pool.query(`DELETE FROM userInterventions WHERE userId = ? AND userInterventionId = ?`, 
+         //put whatever updates that come in from req.body; could be 1 or all (i.e.  email, name, etc.) where id=id coming in
+         [userId, userInterventionId],
+         function(err, row, fields) {
+         res.json(row)
+      });
+     };
   
   
 
@@ -113,5 +124,6 @@ module.exports = {
     list,
     show,
     create,
-    update
+    update,
+    remove
 }
