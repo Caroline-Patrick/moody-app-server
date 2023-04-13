@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS users, userLogs, moods, interventions;
+DROP TABLE IF EXISTS users, userLogs, moods, interventions, mood_interventions, userInterventions, userInterventionMoods;
 
 CREATE TABLE `users` (
   `userId` INT NOT NULL AUTO_INCREMENT,
@@ -16,6 +16,34 @@ CREATE TABLE `moods` (
   `moodDesc` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`moodId`),
   UNIQUE INDEX `moodId_UNIQUE` (`moodId` ASC) VISIBLE);
+
+  CREATE TABLE `sub_moods` (
+  `subMoodId` INT NOT NULL AUTO_INCREMENT,
+  `moodId` INT NOT NULL,
+  `subMoodName` VARCHAR(50) NOT NULL,
+  `subMoodDesc` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`subMoodId`),
+  UNIQUE INDEX `subMoodId_UNIQUE` (`subMoodId` ASC) VISIBLE,
+  INDEX `fk_subMood_moodId_idx` (`moodId` ASC) VISIBLE,
+  CONSTRAINT `fk_subMood_moodId`
+    FOREIGN KEY (`moodId`)
+    REFERENCES `moods` (`moodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
+
+CREATE TABLE `sub_sub_moods` (
+  `subSubMoodId` INT NOT NULL AUTO_INCREMENT,
+  `subMoodId` INT NOT NULL,
+  `subSubMoodName` VARCHAR(50) NOT NULL,
+  `subSubMoodDesc` VARCHAR(200) NOT NULL,
+  PRIMARY KEY (`subSubMoodId`),
+  UNIQUE INDEX `subSubMoodId_UNIQUE` (`subSubMoodId` ASC) VISIBLE,
+  INDEX `fk_subSubMood_subMoodId_idx` (`subMoodId` ASC) VISIBLE,
+  CONSTRAINT `fk_subSubMood_subMoodId`
+    FOREIGN KEY (`subMoodId`)
+    REFERENCES `sub_moods` (`subMoodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 
 CREATE TABLE `interventions` (
   `interventionId` INT NOT NULL AUTO_INCREMENT,
@@ -59,23 +87,33 @@ CREATE TABLE `mood_interventions` (
     ON UPDATE CASCADE);
 
 
+
 CREATE TABLE `userLogs` (
   `logId` INT NOT NULL AUTO_INCREMENT,
   `createDate` DATE NOT NULL,
   `createTime` TIME NOT NULL,
-  `moodId` INT NOT NULL,
+  `moodId` INT NULL,
+  `subMoodId` INT NULL,
+  `subSubMoodId` INT NULL,
   `userId` INT NOT NULL,
-  `interventionId` INT, -- Add this line to include the interventionId column
+  `interventionId` INT,
   PRIMARY KEY (`logId`),
-  UNIQUE INDEX `logId_UNIQUE` (`logId` ASC) VISIBLE,
-  INDEX `fk_userLogs_moodId_idx` (`moodId` ASC) VISIBLE,
-  INDEX `fk_userLogs_userId_idx` (`userId` ASC) VISIBLE,
-  CONSTRAINT `fk_userLogs_moodId` -- Updated constraint name
+  CONSTRAINT `fk_userLogs_moodId`
     FOREIGN KEY (`moodId`)
     REFERENCES `moods` (`moodId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_userLogs_userId` -- Updated constraint name
+  CONSTRAINT `fk_userLogs_subMoodId`
+    FOREIGN KEY (`subMoodId`)
+    REFERENCES `sub_moods` (`subMoodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_userLogs_subSubMoodId`
+    FOREIGN KEY (`subSubMoodId`)
+    REFERENCES `sub_sub_moods` (`subSubMoodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_userLogs_userId`
     FOREIGN KEY (`userId`)
     REFERENCES `users` (`userId`)
     ON DELETE CASCADE

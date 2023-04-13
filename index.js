@@ -46,7 +46,7 @@ app.use(function(req, res, next) {
     //allow this url to access
     res.setHeader(
         "Access-Control-Allow-Origin",
-        "http:localhost:5000"
+        "http://localhost:3000"
     );
 
     // Request methods you wish to allow
