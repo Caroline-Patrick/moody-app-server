@@ -13,7 +13,7 @@ CREATE TABLE `users` (
 CREATE TABLE `moods` (
   `moodId` INT NOT NULL AUTO_INCREMENT,
   `moodName` VARCHAR(50) NOT NULL,
-  `moodDesc` VARCHAR(200) NOT NULL,
+  `moodDesc` VARCHAR(300) NULL,
   PRIMARY KEY (`moodId`),
   UNIQUE INDEX `moodId_UNIQUE` (`moodId` ASC) VISIBLE);
 
@@ -21,7 +21,7 @@ CREATE TABLE `moods` (
   `subMoodId` INT NOT NULL AUTO_INCREMENT,
   `moodId` INT NOT NULL,
   `subMoodName` VARCHAR(50) NOT NULL,
-  `subMoodDesc` VARCHAR(200) NOT NULL,
+  `subMoodDesc` VARCHAR(300) NULL,
   PRIMARY KEY (`subMoodId`),
   UNIQUE INDEX `subMoodId_UNIQUE` (`subMoodId` ASC) VISIBLE,
   INDEX `fk_subMood_moodId_idx` (`moodId` ASC) VISIBLE,
@@ -35,7 +35,7 @@ CREATE TABLE `sub_sub_moods` (
   `subSubMoodId` INT NOT NULL AUTO_INCREMENT,
   `subMoodId` INT NOT NULL,
   `subSubMoodName` VARCHAR(50) NOT NULL,
-  `subSubMoodDesc` VARCHAR(200) NOT NULL,
+  `subSubMoodDesc` VARCHAR(300) NULL,
   PRIMARY KEY (`subSubMoodId`),
   UNIQUE INDEX `subSubMoodId_UNIQUE` (`subSubMoodId` ASC) VISIBLE,
   INDEX `fk_subSubMood_subMoodId_idx` (`subMoodId` ASC) VISIBLE,
@@ -144,23 +144,57 @@ INSERT INTO users
 	(firstName, lastName, email, password)
 VALUES 
   ("James", "Butt", "james.butt@gmail.com", "password1"),
-  ("Josephine", "Darakjy", "josephine.darakjy@gmail.com", "password2"),
-  ("Art", "Venere", "art.venere@gmail.com",  "password3"),
-  ("Lenna", "Paprocki", "lenna.paprocki@gmail.com", "password4"),
-  ("Donette", "Foller", "donette.foller@gmail.com", "password5"),
-  ("Simona", "Morasca", "simona.morasca@gmail.com",  "password6"),
-  ("Mitsue", "Tollner", "mitsue.tollner@gmail.com", "password7"),
-  ("Leota", "Dilliard", "leota.dilliard@gmail.com",  "password8"),
-  ("Sage", "Wieser", "sage.wieser@gmail.com",  "password9"),
-  ("Kris", "Marrier", "kris.marrier@gmail.com",  "password10");
+  ("Josephine", "Darakjy", "josephine.darakjy@gmail.com", "password2");
+  
 
 INSERT INTO moods
-	(moodId, moodName, moodDesc)
+	(moodName, moodDesc)
 VALUES 
-  (001, "Anger", "feeling mad"),
-  (002, "Joyful", "Feeling happy"),
-  (003, "Sad", "feeling down"),
-  (004, "Bored", "feeling blah");
+  ( "Joy", null),
+  ("Love", null),
+  ("Surprise", null),
+  ("Sadness", null),
+  ("Anger", null),
+  ("Fear", null);
+
+
+
+INSERT INTO sub_moods (moodId, subMoodName, subMoodDesc)
+VALUES
+    (1, "Euphoric", null),
+    (1, "Excited", null),
+    (1, "Optimistic", null),
+    (1, "Proud", null),
+    (1, "Cheerful", null),
+    (1, "Happy", null),
+    (1, "Content", null),
+    (1, "Peaceful", null),
+	  (2, "Enchanted", null),
+    (2, "Romantic", null),
+    (2, "Affectionate", null),
+    (2, "Sentimental", null),
+    (2, "Grateful", null),
+    (3, "Moved", null),
+    (3, "Overcome", null),
+    (3, "Amazed", null),
+    (3, "Confused", null),
+    (3, "Stunned", null),
+    (4, "Gloomy", null),
+    (4, "Lonely", null),
+    (4, "Shameful", null),
+    (4, "Disappointed", null),
+    (4, "Unhappy", null),
+    (4, "Hurt", null),
+    (5, "Disgusted", null),
+    (5, "Jealous", null),
+    (5, "Irritable", null),
+    (5, "Exasperated", null),
+    (5, "Enraged", null),
+    (6, "Horrified", null),
+    (6, "Nervous", null),
+    (6, "Insecure", null),
+    (6, "Terrified", null),
+    (6, "Scared", null);
 
 INSERT INTO interventions
 	(interventionId, interventionName, interventionDesc)
