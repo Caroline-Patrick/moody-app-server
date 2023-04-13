@@ -8,7 +8,8 @@ const usersRoute =require("./routes/usersRoute");
 const userLogsRoute=require("./routes/userLogsRoute");
 const signupRoute = require("./routes/signup");
 const signinRoute= require("./routes/signin");
-const userInterventionRoute= require("./routes/userIntervention")
+const userInterventionRoute= require("./routes/userIntervention");
+const moodsRoutes=require("./routes/moodsRoutes");
 
 const PORT = process.env.PORT || 5000;
 

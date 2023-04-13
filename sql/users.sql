@@ -211,3 +211,7 @@ INSERT INTO mood_interventions
 VALUES
 (1, 11),
 (1, 13)
+
+
+ALTER TABLE `sub_moods` ADD COLUMN `tier` INT NOT NULL;
+ALTER TABLE `sub_sub_moods` ADD COLUMN `tier` INT NOT NULL;
