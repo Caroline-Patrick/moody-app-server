@@ -36,8 +36,9 @@ const show = (req, res) => {
     );
   };
 
-const create = (req, res) => {
-    const { interventionName, interventionDesc, moods, userId } = req.body;
+  const create = (req, res) => {
+    const { interventionName, interventionDesc, userId } = req.body;
+    const { tier1MoodId, tier2MoodId, subSubMoodId } = req.body;
   
     // Insert a new record into the userInterventions table
     pool.query(
@@ -52,41 +53,54 @@ const create = (req, res) => {
   
         const userInterventionId = result.insertId;
   
-        // Loop through the moods array and insert associations into the userInterventionMoods table
-        moods.forEach((mood, index) => {
+        if (tier1MoodId) {
           pool.query(
-            "SELECT moodId FROM moods WHERE moodName = ?",
-            [mood],
-            (err, rows, fields) => {
-              if (err || rows.length === 0) {
+            "INSERT INTO userInterventionMoods (userInterventionId, tier1MoodId) VALUES (?, ?)",
+            [userInterventionId, tier1MoodId],
+            (err, result) => {
+              if (err) {
                 console.log(err);
-                res.status(500).send("Error occurred while fetching moodId");
+                res.status(500).send("Error occurred while inserting user intervention mood");
                 return;
               }
-  
-              const moodId = rows[0].moodId;
-  
-              pool.query(
-                "INSERT INTO userInterventionMoods (userInterventionId, moodId) VALUES (?, ?)",
-                [userInterventionId, moodId],
-                (err, result) => {
-                  if (err) {
-                    console.log(err);
-                    res.status(500).send("Error occurred while inserting user intervention mood");
-                    return;
-                  }
-  
-                  if (index === moods.length - 1) {
-                    res.json({ message: "User intervention created successfully" });
-                  }
-                }
-              );
             }
           );
-        });
+        }
+  
+        if (tier2MoodId) {
+          pool.query(
+            "INSERT INTO userInterventionMoods (userInterventionId, tier2MoodId) VALUES (?, ?)",
+            [userInterventionId, tier2MoodId],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+                res.status(500).send("Error occurred while inserting user intervention mood");
+                return;
+              }
+            }
+          );
+        }
+  
+        if (subSubMoodId) {
+          pool.query(
+            "INSERT INTO userInterventionMoods (userInterventionId, subSubMoodId) VALUES (?, ?)",
+            [userInterventionId, subSubMoodId],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+                res.status(500).send("Error occurred while inserting user intervention mood");
+                return;
+              }
+            }
+          );
+        }
+  
+        res.json({ message: "User intervention created successfully" });
       }
     );
   };
+  
+
 
   const update = (req, res) => {
     const userId = parseInt(req.params.userId);

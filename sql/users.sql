@@ -139,12 +139,21 @@ CREATE TABLE `userInterventionMoods` (
     ON UPDATE CASCADE);
 
 
+ALTER TABLE `moods` ADD COLUMN `tier` INT NOT NULL;
+ALTER TABLE `sub_moods` ADD COLUMN `tier` INT NOT NULL;
+ALTER TABLE `sub_sub_moods` ADD COLUMN `tier` INT NOT NULL;
+
+UPDATE `moods` SET `tier` =1;
+UPDATE `sub_moods` SET `tier` =2;
+UPDATE `sub_sub_moods` SET `tier`=3;
+
+
 
 INSERT INTO users
 	(firstName, lastName, email, password)
 VALUES 
-  ("James", "Butt", "james.butt@gmail.com", "password1"),
-  ("Josephine", "Darakjy", "josephine.darakjy@gmail.com", "password2");
+  ("James", "Butt", "james@test.com", "password123"),
+  ("Josephine", "Darakjy", "josephine@test.com", "password123");
   
 
 INSERT INTO moods
@@ -156,8 +165,7 @@ VALUES
   ("Sadness", null),
   ("Anger", null),
   ("Fear", null);
-
-
+  
 
 INSERT INTO sub_moods (moodId, subMoodName, subMoodDesc)
 VALUES
@@ -168,8 +176,11 @@ VALUES
     (1, "Cheerful", null),
     (1, "Happy", null),
     (1, "Content", null),
-    (1, "Peaceful", null),
-	  (2, "Enchanted", null),
+    (1, "Peaceful", null);
+    
+INSERT INTO sub_moods (moodId, subMoodName, subMoodDesc)
+VALUES
+	(2, "Enchanted", null),
     (2, "Romantic", null),
     (2, "Affectionate", null),
     (2, "Sentimental", null),
@@ -196,22 +207,98 @@ VALUES
     (6, "Terrified", null),
     (6, "Scared", null);
 
+INSERT INTO sub_sub_moods (subMoodId, subSubMoodName, subSubMoodDesc)
+	VALUES
+		(1, "Jubilant", null),
+        (1, "Elated", null),
+        (2, "Zealous", null),
+        (2, "Enthusiastic", null),
+        (3, "Hopeful", null),
+        (3, "Eager", null),
+        (4, "Illustrious", null),
+        (4, "Triumphant", null),
+        (5, "Playful", null),
+        (5, "Amused", null),
+        (6, "Delighted", null),
+        (6, "Jovial", null),
+        (7, "Pleased", null),
+        (7, "Satisfied", null),
+        (8, "Tranquil", null),
+        (8, "Serene", null),
+        (9, "Enthralled", null),
+        (9, "Rapturous", null), 
+        (10, "Passionate", null),
+        (10, "Enamored", null),
+        (11, "Warm-hearted", null),
+        (11, "Compassionate", null),
+        (12, "Tender", null),
+        (12, "Nostalgic", null),
+        (13, "Appreciative", null),
+        (13, "Thankful", null),
+        (14, "Touched", null),
+        (14, "Stimulated", null),
+        (15, "Astounded", null),
+        (15, "Speechless", null),
+        (16, "Awe-struck", null),
+        (16, "Astonished", null),
+        (17, "Perplexed", null),
+        (17, "Disillusioned", null),
+        (18, "Bewildered", null),
+        (18, "Shocked", null),
+        (19, "Depressed", null),
+        (19, "Hopeless", null),
+        (20, "Neglected", null),
+        (20, "Isolated", null),
+        (21, "Guilty", null),
+        (21, "Regretful", null),
+        (22, "Displeased", null),
+        (22, "Dismayed", null),
+        (23, "Disheartened", null),
+        (23, "Miserable", null),
+        (24, "Disturbed", null),
+        (24, "Agonized", null),
+        (25, "Revolted", null),
+        (25, "Contemptuous", null),
+        (26, "Envious", null),
+        (26, "Resentful", null),
+        (27, "Aggravated", null),
+        (27, "Annoyed", null),
+        (28, "Frustrated", null),
+        (28, "Agitated", null),
+        (29, "Hostile", null),
+        (29, "Hateful", null),
+        (30, "Dreadful", null),
+        (30, "Mortified", null),
+        (31, "Anxious", null),
+        (31, "Worried", null),
+        (32, "Inadequate", null),
+        (32, "Inferior", null),
+        (33, "Hysterical", null),
+        (33, "Panicked", null),
+        (34, "Helpless", null),
+        (34, "Frightened", null);
+        
+        
+    
+
+
 INSERT INTO interventions
-	(interventionId, interventionName, interventionDesc)
+	(interventionName, interventionDesc)
 VALUES 
-  (11, "Scribbling", "scribble through paper"),
-  (12, "Log", "I listened to music"),
-  (13, "Journal", "write down your feelings"),
-  (14, "Gratitude", "what are you grateful for");
+  ("Scribbling", "Use a pen to scribble through paper"),
+  ("Walk", "Walk outside for 5-10 minutes"),
+  ("Journal", "Write down the thoughts coming to mind"),
+  ("Gratitude", "What is something you are grateful for?");
 
-
+SELECT * FROM moods;
 INSERT INTO mood_interventions
   (moodId, interventionId)
 
 VALUES
-(1, 11),
-(1, 13)
+(1, 4),
+(5, 1),
+(4, 3),
+(5, 2);
 
 
-ALTER TABLE `sub_moods` ADD COLUMN `tier` INT NOT NULL;
-ALTER TABLE `sub_sub_moods` ADD COLUMN `tier` INT NOT NULL;
+

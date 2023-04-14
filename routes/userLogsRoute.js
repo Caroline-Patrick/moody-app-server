@@ -4,7 +4,7 @@ const userLogsController = require("../controllers/userLogsController");
 
 router.get("/:userId", userLogsController.list);
 router.get("/:userId/:logId", userLogsController.show);
-router.post("/", userLogsController.create);
+router.post("/create/:userId/:subSubMoodId", userLogsController.create);
 router.put("/:userId/:logId", userLogsController.update);
 router.put("/:userId/:logId/intervention", userLogsController.updateIntervention);
 router.delete("/:userId/:logId", userLogsController.remove);

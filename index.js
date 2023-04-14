@@ -8,8 +8,9 @@ const usersRoute =require("./routes/usersRoute");
 const userLogsRoute=require("./routes/userLogsRoute");
 const signupRoute = require("./routes/signup");
 const signinRoute= require("./routes/signin");
-const userInterventionRoute= require("./routes/userIntervention");
+const userInterventionRoute= require("./routes/userInterventions");
 const moodsRoutes=require("./routes/moodsRoutes");
+const interventionsRoute = require("./routes/interventionsRoutes")
 
 const PORT = process.env.PORT || 5000;
 
@@ -72,7 +73,8 @@ app.use('/signin', signinRoute);
 app.use('/users', authenticateToken, usersRoute);
 app.use('/log', moodsRoutes);
 app.use('/userLogs', authenticateToken, userLogsRoute);
-app.use('/interventions', authenticateToken, userInterventionRoute);
+app.use('/user-interventions', userInterventionRoute);
+app.use('/interventions', interventionsRoute);
 
 app.get('/', (req,res)=> {
     res.json({message: "Hello Universe!"})
