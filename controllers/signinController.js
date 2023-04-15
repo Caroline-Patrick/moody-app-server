@@ -20,7 +20,7 @@ const signin = (req, res) => {
             const token =generateToken(results[0]);
             res.json({
                 token, 
-                user: req.user,
+                user: results[0],
             })
         }
     })

@@ -72,7 +72,7 @@ app.use('/signup', signupRoute);
 app.use('/signin', signinRoute);
 app.use('/users', authenticateToken, usersRoute);
 app.use('/log', moodsRoutes);
-app.use('/userLogs', authenticateToken, userLogsRoute);
+app.use('/userLogs',authenticateToken, userLogsRoute);
 app.use('/user-interventions', userInterventionRoute);
 app.use('/interventions', interventionsRoute);
 
