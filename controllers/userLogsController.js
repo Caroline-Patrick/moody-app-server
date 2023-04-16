@@ -2,7 +2,7 @@ const pool = require("../sql/connections");
 
 
 const list = (req, res) => {
-  const userId = parseInt(req.params.userId);
+  const userId = parseInt(req.query.userId);
 
   pool.query(
     `SELECT * FROM userLogs WHERE userId = ?`,
@@ -13,10 +13,12 @@ const list = (req, res) => {
         res.status(500).send("Error occurred while fetching userLogs");
         return;
       }
+      console.log(userId)
       res.json(rows);
     }
   );
 };
+
 
 const show = (req, res) => {
   const userId = parseInt(req.params.userId);

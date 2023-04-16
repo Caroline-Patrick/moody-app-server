@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userLogsController = require("../controllers/userLogsController");
 
-router.get("/:userId", userLogsController.list);
+router.get("/", userLogsController.list);
 router.get("/:userId/:logId", userLogsController.show);
 router.post("/create/:userId/:subSubMoodName", userLogsController.create);
 router.put("/:userId/:logId", userLogsController.update);
