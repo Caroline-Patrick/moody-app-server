@@ -12,6 +12,6 @@ router.get('/moods/tier2/:parentMoodId', moodsController.getTier2Moods);
 router.get('/moods/tier3/:subSubMoodName', moodsController.getTier3Moods);
 
 //show 1 mood
-router.get('/moods/:userId/:subSubMoodId', moodsController.showTier3Mood);
+// router.get('/moods/:userId/:subSubMoodId', moodsController.showTier3Mood);
 
 module.exports = router;
