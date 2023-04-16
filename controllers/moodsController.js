@@ -1,6 +1,7 @@
 const pool = require("../sql/connections");
 
 
+
 //list tier 1 moods
 const getTier1Moods = (req, res) => {
   pool.query(`SELECT * FROM moods`, (err, rows, field) => {
