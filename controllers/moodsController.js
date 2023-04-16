@@ -34,18 +34,19 @@ const getTier2Moods = (req, res) => {
 
 //list tier 3 moods
 const getTier3Moods = (req, res) => {
-  subMoodId = req.params.subMoodId;
+  // subMoodId = req.params.subMoodId;
+  const subSubMoodName = req.params.subSubMoodName
 
   pool.query(
-    `SELECT * FROM sub_sub_moods WHERE subMoodId =?`,
-    [subMoodId],
+    `SELECT * FROM sub_sub_moods WHERE subSubMoodName =?`,
+    [subSubMoodName],
     (err, rows, fields) => {
       if (err) {
         console.log(err);
         res.status(500).send("Error occurred while fetching moods");
         return;
       }
-    
+      console.log("Tier 3 call" + subSubMoodName)
       res.json(rows);
     }
   );

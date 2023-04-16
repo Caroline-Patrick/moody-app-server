@@ -11,7 +11,7 @@ const signinRoute = require("./routes/signin");
 const userInterventionRoute = require("./routes/userInterventions");
 const moodsRoutes = require("./routes/moodsRoutes");
 const interventionsRoute = require("./routes/interventionsRoutes");
-const { Emotion } = require("./sql/connections");
+
 
 const PORT = process.env.PORT || 5000;
 
@@ -41,24 +41,7 @@ const authenticateToken = (req, res, next) => {
   next();
 };
 
-async function getEmotionData() {
-  const topLevelEmotions = await Emotion.findAll({
-    where: { level: 1 },
-    include: [
-      {
-        model: Emotion,
-        as: "children",
-        include: [{ model: Emotion, as: "children" }],
-      },
-    ],
-  });
-  return topLevelEmotions.map((emotion) => emotion.toJSON());
-}
 
-app.get("/api/emotions", async (req, res) => {
-  const emotionData = await getEmotionData();
-  res.json(emotionData);
-});
 
 app.use(cors());
 app.use(function (req, res, next) {
