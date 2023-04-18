@@ -35,7 +35,7 @@ CREATE TABLE `sub_sub_moods` (
   `subSubMoodId` INT NOT NULL AUTO_INCREMENT,
   `subMoodId` INT NOT NULL,
   `subSubMoodName` VARCHAR(50) NOT NULL,
-  `subSubMoodDesc` VARCHAR(300) NULL,
+  `subSubMoodDesc` VARCHAR(500) NULL,
   PRIMARY KEY (`subSubMoodId`),
   UNIQUE INDEX `subSubMoodId_UNIQUE` (`subSubMoodId` ASC) VISIBLE,
   INDEX `fk_subSubMood_subMoodId_idx` (`subMoodId` ASC) VISIBLE,

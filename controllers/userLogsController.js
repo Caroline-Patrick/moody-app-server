@@ -13,7 +13,7 @@ const list = (req, res) => {
         res.status(500).send("Error occurred while fetching userLogs");
         return;
       }
-      console.log(userId)
+      
       res.json(rows);
     }
   );
@@ -39,7 +39,7 @@ const show = (req, res) => {
 };
 
 const create = (req, res) => {
-console.log("made it to create!")
+
 const {userId, subSubMoodName} = req.params;
 const {userNotes} = req.body
   
