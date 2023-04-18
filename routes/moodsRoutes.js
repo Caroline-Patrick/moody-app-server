@@ -9,9 +9,9 @@ router.get('/moods/tier1', moodsController.getTier1Moods);
 router.get('/moods/tier2/:parentMoodId', moodsController.getTier2Moods);
 
 // // Get all tier 3 emotions for a given sub mood id
-router.get('/moods/tier3/:subMoodId', moodsController.getTier3Moods);
+router.get('/moods/tier3/:subSubMoodName', moodsController.getTier3Moods);
 
 //show 1 mood
-router.get('/moods/:userId/:subSubMoodId', moodsController.showTier3Mood);
+// router.get('/moods/:userId/:subSubMoodId', moodsController.showTier3Mood);
 
 module.exports = router;

@@ -2,7 +2,7 @@ const pool = require("../sql/connections");
 
 
 const list = (req, res) => {
-  const userId = parseInt(req.params.userId);
+  const userId = parseInt(req.query.userId);
 
   pool.query(
     `SELECT * FROM userLogs WHERE userId = ?`,
@@ -13,10 +13,12 @@ const list = (req, res) => {
         res.status(500).send("Error occurred while fetching userLogs");
         return;
       }
+      
       res.json(rows);
     }
   );
 };
+
 
 const show = (req, res) => {
   const userId = parseInt(req.params.userId);
@@ -38,12 +40,15 @@ const show = (req, res) => {
 
 const create = (req, res) => {
 
-const {userId, subSubMoodId} = req.params;
+const {userId, subSubMoodName} = req.params;
+const {userNotes} = req.body
   
   const currentDate = new Date();
+
+
       pool.query(
-        "INSERT INTO userLogs(createDate, createTime, subSubMoodId, userId) VALUES (?, ?, ?,?)",
-        [currentDate, currentDate, subSubMoodId, userId],
+        "INSERT INTO userLogs(createDate, createTime, subSubMoodName, userNotes, userId) VALUES (?, ?, ?,?, ?)",
+        [currentDate, currentDate, subSubMoodName, userNotes, userId],
         (err, result) => {
           if (err) {
             // Handle error
@@ -51,6 +56,7 @@ const {userId, subSubMoodId} = req.params;
             res.status(500).send("Error occurred while inserting userLog");
             return;
           }
+         
           res.json({
             message: "UserLog created successfully",
             

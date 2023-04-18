@@ -1,4 +1,4 @@
-require("dotenv").config()
+require("dotenv").config();
 
 const mysql = require('mysql2');
 const {DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_DATABASE} =process.env
@@ -13,5 +13,6 @@ const pool = mysql.createPool({
  });
 
 
- module.exports = pool;
 
+
+module.exports =  pool ;
