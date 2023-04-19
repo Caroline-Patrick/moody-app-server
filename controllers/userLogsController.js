@@ -137,31 +137,16 @@ const {userNotes} = req.body
 const update = (req, res) => {
   const userId = parseInt(req.params.userId);
   const logId = parseInt(req.params.logId);
-  const { mood } = req.body;
+  const { userNotes } = req.body;
 
   if (isNaN(userId) || isNaN(logId)) {
     res.status(400).send("Invalid userId or logId");
     return;
   }
 
-  // Find the moodId associated with the mood string
-  pool.query(
-    "SELECT moodId FROM moods WHERE moodName = ?",
-    [mood],
-    (err, rows, fields) => {
-      if (err || rows.length === 0) {
-        // Handle error
-        console.log(err);
-        res.status(500).send("Error occurred while fetching moodId");
-        return;
-      }
-
-      // Get the moodId from the query result to update userLogs table
-      const moodId = rows[0].moodId;
-
       pool.query(
-        `UPDATE userLogs SET moodId = ? WHERE userId = ? AND logId = ?`,
-        [moodId, userId, logId],
+        `UPDATE userLogs SET userNotes = ? WHERE userId = ? AND logId = ?`,
+        [userNotes, userId, logId],
         function (err, result) {
           if (err) {
             console.log(err);
@@ -171,9 +156,7 @@ const update = (req, res) => {
           res.json({ affectedRows: result.affectedRows });
         }
       );
-    }
-  );
-};
+    };
 
 const updateIntervention = (req, res) => {
   const userId = parseInt(req.params.userId);
