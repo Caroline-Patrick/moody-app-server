@@ -62,77 +62,8 @@ const {userNotes} = req.body
             
           });     
         });
-        
-
-
-  // Find the moodId associated with the mood string
-  // pool.query(
-  //   "SELECT moodId FROM moods WHERE moodName = ?",
-  //   [mood],
-  //   (err, rows, fields) => {
-  //     if (err || rows.length === 0) {
-  //       // Handle error
-  //       console.log(err);
-  //       res.status(500).send("Error occurred while fetching moodId");
-  //       return;
-  //     }
-
-  //     // Get the moodId from the query result
-  //     const moodId = rows[0].moodId;
-
-  //     // Insert a new record into the userLogs table
-  //     const currentDate = new Date();
-  //     pool.query(
-  //       "INSERT INTO userLogs(createDate, createTime, moodId, userId) VALUES (?, ?, ?, ?)",
-  //       [currentDate, currentDate, moodId, userId],
-  //       (err, result) => {
-  //         if (err) {
-  //           // Handle error
-  //           console.log(err);
-  //           res.status(500).send("Error occurred while inserting userLog");
-  //           return;
-  //         }
-  //       }
-  //     );
-
-  //     // Fetches and returns the list of interventions (preset & user generated) based on the mood
-  //     pool.query(
-  //     `SELECT 
-  //       i.interventionId, 
-  //       i.interventionName, 
-  //       i.interventionDesc,
-  //       'preset' as interventionType
-  //     FROM interventions i
-  //     INNER JOIN mood_interventions mi ON i.interventionId = mi.interventionId
-  //     WHERE mi.moodId = ?
-  //     UNION ALL
-  //     SELECT 
-  //       ui.userInterventionId as interventionId, 
-  //       ui.interventionName, 
-  //       ui.interventionDesc,
-  //       'user' as interventionType
-  //     FROM userInterventions ui
-  //     INNER JOIN userInterventionMoods uim ON ui.userInterventionId = uim.userInterventionId
-  //     WHERE uim.moodId = ? AND ui.userId = ?`,
-  //       [moodId, moodId, userId],
-  //       (err, rows, fields) => {
-  //         if (err) {
-  //           console.log(err);
-  //           res.status(500).send("Error occurred while fetching interventions");
-  //           return;
-  //         }
-
-  //         // Send a response with the intervention options
-  //         res.json({
-  //           message: "UserLog created successfully",
-  //           interventions: rows,
-  //         });
-  //       }
-  //     );
-  //   }
-  // );
-};
-
+    
+      }
 
 const update = (req, res) => {
   const userId = parseInt(req.params.userId);
@@ -153,31 +84,12 @@ const update = (req, res) => {
             res.status(500).send("Error occurred while updating the userLog");
             return;
           }
+          console.log("Updated")
           res.json({ affectedRows: result.affectedRows });
         }
       );
     };
 
-const updateIntervention = (req, res) => {
-  const userId = parseInt(req.params.userId);
-  const logId = parseInt(req.params.logId);
-  const { interventionId } = req.body;
-
-  pool.query(
-    `UPDATE userLogs SET interventionId = ? WHERE userId = ? AND logId = ?`,
-    [interventionId, userId, logId],
-    function (err, result) {
-      if (err) {
-        console.log(err);
-        res
-          .status(500)
-          .send("Error occurred while updating the userLog with intervention");
-        return;
-      }
-      res.json({ affectedRows: result.affectedRows });
-    }
-  );
-};
 
 const remove = (req, res) => {
   const userId = parseInt(req.params.userId);
@@ -199,6 +111,5 @@ module.exports = {
   show,
   create,
   update,
-  updateIntervention,
-  remove,
-};
+  remove
+}
