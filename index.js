@@ -19,10 +19,11 @@ const authenticateToken = (req, res, next) => {
   //Get meta information for our request
   const authHeader = req.headers.authorization;
   // console.log({auth: authHeader})
+  console.log("Request headers: ", req.headers)
 
   //take the Bearer token (if it exists) and split it at the space and then take the 2nd item in array
   const token = authHeader && authHeader.split(" ")[1];
-  // console.log(token);
+  console.log("Token: ", token);
 
   //error 403 (not found) sent
   if (!token) return res.sendStatus(403);
@@ -33,8 +34,6 @@ const authenticateToken = (req, res, next) => {
     if (err) return res.sendStatus(403);
 
     // add property called user to the request object
-    // console.log({user})
-    // console.log(req)
     req.user = user;
   });
 
@@ -43,18 +42,26 @@ const authenticateToken = (req, res, next) => {
 
 
 
+// app.use(cors({
+//   origin: 'https://effulgent-strudel-007716.netlify.app',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
+
 app.use(cors());
+
 app.use(function (req, res, next) {
   //allow this url to access
-  res.setHeader("Access-Control-Allow-Origin", "https://effulgent-strudel-007716.netlify.app");
+  res.setHeader("Access-Control-Allow-Origin", "https://effulgent-strudel-007716.netlify.app/");
 
   // Request methods you wish to allow
-  res.setHeader("Access-Control-Allow-Methods", "POST");
+  res.setHeader("Access-Control-Allow-Methods", "POST", "GET", "PUT", "DELETE");
 
   //request headers you wish to allow
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
+    "X-Requested-With,content-type",
+    "Authorization"
   );
 
   //this is for setting cookies
@@ -68,7 +75,7 @@ app.use("/signup", signupRoute);
 app.use("/signin", signinRoute);
 app.use("/users", authenticateToken, usersRoute);
 app.use("/log", moodsRoutes);
-app.use("/userLogs", userLogsRoute);
+app.use("/userLogs", authenticateToken, userLogsRoute);
 app.use("/user-interventions", userInterventionRoute);
 app.use("/interventions", interventionsRoute);
 
