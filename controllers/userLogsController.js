@@ -41,14 +41,14 @@ const show = (req, res) => {
 const create = (req, res) => {
 
 const {userId, subSubMoodName} = req.params;
-const {userNotes} = req.body
+const {userNotes, color} = req.body
   
   const currentDate = new Date();
 
 
       pool.query(
-        "INSERT INTO userLogs(createDate, createTime, subSubMoodName, userNotes, userId) VALUES (?, ?, ?,?, ?)",
-        [currentDate, currentDate, subSubMoodName, userNotes, userId],
+        "INSERT INTO userLogs(createDate, createTime, subSubMoodName, userNotes, color, userId) VALUES (?, ?, ?,?,?, ?)",
+        [currentDate, currentDate, subSubMoodName, userNotes, color, userId],
         (err, result) => {
           if (err) {
             // Handle error

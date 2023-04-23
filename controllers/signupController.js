@@ -13,6 +13,9 @@ const signup = async (req, res) => {
       function (err, row, fields) {
         if (err) {
           console.error(err);
+          if (err.code === "ER_DUP_ENTRY") {
+            return res.status(409).json({ message: "Email already exists" });
+          }
           return res.status(500).json({ message: "Internal server error" });
         }
         res.json(row);
@@ -23,6 +26,7 @@ const signup = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
 
 module.exports = {
   signup,
