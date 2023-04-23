@@ -42,12 +42,33 @@ const authenticateToken = (req, res, next) => {
 
 
 
-app.use(cors({
-  origin: 'https://effulgent-strudel-007716.netlify.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// app.use(cors({
+//   origin: 'https://effulgent-strudel-007716.netlify.app',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }));
 
+app.use(cors());
+
+app.use(function (req, res, next) {
+  //allow this url to access
+  res.setHeader("Access-Control-Allow-Origin", "https://effulgent-strudel-007716.netlify.app/");
+
+  // Request methods you wish to allow
+  res.setHeader("Access-Control-Allow-Methods", "POST", "GET", "PUT", "DELETE");
+
+  //request headers you wish to allow
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type",
+    "Authorization"
+  );
+
+  //this is for setting cookies
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  next();
+});
 
 app.use(express.json());
 app.use("/signup", signupRoute);
