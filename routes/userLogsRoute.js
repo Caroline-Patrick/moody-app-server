@@ -6,7 +6,6 @@ router.get("/", userLogsController.list);
 router.get("/:userId/:logId", userLogsController.show);
 router.post("/create/:userId/:subSubMoodName", userLogsController.create);
 router.put("/:userId/:logId", userLogsController.update);
-router.put("/:userId/:logId/intervention", userLogsController.updateIntervention);
 router.delete("/:userId/:logId", userLogsController.remove);
 
 module.exports = router;

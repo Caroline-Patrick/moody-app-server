@@ -7,7 +7,6 @@ const list = (req, res) => {
 };
 
 const show = (req, res) => {
-  // console.log(req.params.id)
   const { id } = req.params;
   pool.query(
     `SELECT * FROM users WHERE userId =${id}`,
@@ -18,8 +17,6 @@ const show = (req, res) => {
 };
 
 const create = (req, res) => {
-  // console.log(req.body)
-
   const { firstName, lastName, email, password } = req.body;
 
   pool.query(

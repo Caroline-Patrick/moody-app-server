@@ -35,7 +35,7 @@ CREATE TABLE `sub_sub_moods` (
   `subSubMoodId` INT NOT NULL AUTO_INCREMENT,
   `subMoodId` INT NOT NULL,
   `subSubMoodName` VARCHAR(50) NOT NULL,
-  `subSubMoodDesc` VARCHAR(500) NULL,
+  `subSubMoodDesc` VARCHAR(300) NULL,
   PRIMARY KEY (`subSubMoodId`),
   UNIQUE INDEX `subSubMoodId_UNIQUE` (`subSubMoodId` ASC) VISIBLE,
   INDEX `fk_subSubMood_subMoodId_idx` (`subMoodId` ASC) VISIBLE,
@@ -53,24 +53,21 @@ CREATE TABLE `interventions` (
   UNIQUE INDEX `interventionId_UNIQUE` (`interventionId` ASC) VISIBLE);
 
 
+DROP TABLE IF EXISTS `mood_interventions`;
+
 CREATE TABLE `mood_interventions` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `moodId` INT NOT NULL,
-  `interventionId` INT NOT NULL,
+  `moodId` INT,
+  `subMoodId` INT,
+  `subSubMoodId` INT,
+  `interventionId` INT,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `mood_intervention_unique` (`moodId`, `interventionId`) VISIBLE,
-  INDEX `fk_moodId_idx` (`moodId` ASC) VISIBLE,
-  INDEX `fk_interventionId_idx` (`interventionId` ASC) VISIBLE,
-  CONSTRAINT `fk_moodId`
-    FOREIGN KEY (`moodId`)
-    REFERENCES `moods` (`moodId`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT `fk_interventionId`
-    FOREIGN KEY (`interventionId`)
-    REFERENCES `interventions` (`interventionId`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE);
+  CONSTRAINT `fk_mood_interventions_moods` FOREIGN KEY (`moodId`) REFERENCES `moods` (`moodId`),
+  CONSTRAINT `fk_mood_interventions_sub_moods` FOREIGN KEY (`subMoodId`) REFERENCES `sub_moods` (`subMoodId`),
+  CONSTRAINT `fk_mood_interventions_sub_sub_moods` FOREIGN KEY (`subSubMoodId`) REFERENCES `sub_sub_moods` (`subSubMoodId`),
+  CONSTRAINT `fk_mood_interventions_interventions` FOREIGN KEY (`interventionId`) REFERENCES `interventions` (`interventionId`)
+);
+
 
   CREATE TABLE `userInterventions` (
   `userInterventionId` INT NOT NULL AUTO_INCREMENT,
@@ -87,7 +84,7 @@ CREATE TABLE `mood_interventions` (
     ON UPDATE CASCADE);
 
 
-
+DROP TABLE IF EXISTS userLogs;
 CREATE TABLE `userLogs` (
   `logId` INT NOT NULL AUTO_INCREMENT,
   `createDate` DATE NOT NULL,
@@ -95,8 +92,11 @@ CREATE TABLE `userLogs` (
   `moodId` INT NULL,
   `subMoodId` INT NULL,
   `subSubMoodId` INT NULL,
+  `subsubMoodName` VARCHAR(45),
   `userId` INT NOT NULL,
   `interventionId` INT,
+  `interventionName` VARCHAR(45),
+  `userNotes` VARCHAR(500),
   PRIMARY KEY (`logId`),
   CONSTRAINT `fk_userLogs_moodId`
     FOREIGN KEY (`moodId`)
@@ -119,17 +119,32 @@ CREATE TABLE `userLogs` (
     ON DELETE CASCADE
     ON UPDATE CASCADE);
 
+    
 CREATE TABLE `userInterventionMoods` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `userInterventionId` INT NOT NULL,
-  `moodId` INT NOT NULL,
+  `tier1MoodId` INT NULL,
+  `tier2MoodId` INT NULL,
+  `subSubMoodId` INT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `user_intervention_mood_unique` (`moodId`, `userInterventionId`) VISIBLE,
-  INDEX `fk_moodId_idx` (`moodId` ASC) VISIBLE,
+  UNIQUE INDEX `user_intervention_mood_unique` (`tier1MoodId`, `tier2MoodId`, `subSubMoodId`, `userInterventionId`) VISIBLE,
+  INDEX `fk_tier1MoodId_idx` (`tier1MoodId` ASC) VISIBLE,
+  INDEX `fk_tier2MoodId_idx` (`tier2MoodId` ASC) VISIBLE,
+  INDEX `fk_subSubMoodId_idx` (`subSubMoodId` ASC) VISIBLE,
   INDEX `fk_userInterventionId_idx` (`userInterventionId` ASC) VISIBLE,
-  CONSTRAINT `fk_userIntervention_moodId`
-    FOREIGN KEY (`moodId`)
+  CONSTRAINT `fk_tier1MoodId`
+    FOREIGN KEY (`tier1MoodId`)
     REFERENCES `moods` (`moodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_tier2MoodId`
+    FOREIGN KEY (`tier2MoodId`)
+    REFERENCES `sub_moods` (`subMoodId`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_subSubMoodId`
+    FOREIGN KEY (`subSubMoodId`)
+    REFERENCES `sub_sub_moods` (`subSubMoodId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_userInterventionId`
@@ -137,6 +152,7 @@ CREATE TABLE `userInterventionMoods` (
     REFERENCES `userInterventions` (`userInterventionId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE);
+
 
 
 ALTER TABLE `moods` ADD COLUMN `tier` INT NOT NULL;
@@ -300,5 +316,12 @@ VALUES
 (4, 3),
 (5, 2);
 
+INSERT INTO mood_interventions (moodId, interventionId) VALUES (5, 1), (1, 4), (4,3), (5,2);
+INSERT INTO mood_interventions (subMoodId, interventionId) VALUES (29, 1), (8, 4), (29, 2), (20, 3);
+INSERT INTO mood_interventions (subSubMoodId, interventionId) VALUES (15,4), (37, 1), (37, 3), (55, 1);
+
+INSERT INTO mood_interventions
+  (subSubMoodId, interventionId)
+  Values (22, 4);
 
 
