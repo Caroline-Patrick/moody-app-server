@@ -3,6 +3,11 @@ const jwt = require("jsonwebtoken");
 const cors = require("cors");
 
 const app = express();
+app.use(cors({
+  origin: "https://effulgent-strudel-007716.netlify.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 const usersRoute = require("./routes/usersRoute");
 const userLogsRoute = require("./routes/userLogsRoute");
@@ -48,27 +53,28 @@ const authenticateToken = (req, res, next) => {
 //   allowedHeaders: ['Content-Type', 'Authorization']
 // }));
 
-app.use(cors());
+// app.use(cors());
 
-app.use(function (req, res, next) {
-  //allow this url to access
-  res.setHeader("Access-Control-Allow-Origin", "https://effulgent-strudel-007716.netlify.app/");
 
-  // Request methods you wish to allow
-  res.setHeader("Access-Control-Allow-Methods", "POST", "GET", "PUT", "DELETE");
+// app.use(function (req, res, next) {
+//   //allow this url to access
+//   res.setHeader("Access-Control-Allow-Origin", "https://effulgent-strudel-007716.netlify.app/");
 
-  //request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type",
-    "Authorization"
-  );
+//   // Request methods you wish to allow
+//   res.setHeader("Access-Control-Allow-Methods", "POST", "GET", "PUT", "DELETE");
 
-  //this is for setting cookies
-  res.setHeader("Access-Control-Allow-Credentials", true);
+//   //request headers you wish to allow
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "X-Requested-With,content-type",
+//     "Authorization"
+//   );
 
-  next();
-});
+//   //this is for setting cookies
+//   res.setHeader("Access-Control-Allow-Credentials", true);
+
+//   next();
+// });
 
 app.use(express.json());
 app.use("/signup", signupRoute);
@@ -82,5 +88,10 @@ app.use("/interventions", interventionsRoute);
 app.get("/", (req, res) => {
   res.json({ message: "Hello Universe!" });
 });
+
+app.get("/test", (req, res) => {
+  res.json({ message: "Test route working" });
+});
+
 
 app.listen(PORT, () => console.log(`Listening @ http://localhost:${PORT}`));

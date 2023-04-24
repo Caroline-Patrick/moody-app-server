@@ -7,6 +7,7 @@ const generateToken = (user) => {
 };
 
 const signin = (req, res) => {
+    res.json({req})
     const { email, password } = req.body;
     console.log("Email and password received:", email, password);
   
